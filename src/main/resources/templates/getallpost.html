@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All Posts</title>
+    <link rel="stylesheet" th:href="@{/css/getall.css}"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+    
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <h1 class="mb-0">All Posts</h1>
+            <nav class="mt-2">
+                <a th:href="@{/}" class="text-white mr-3">Home</a>
+                <a th:href="@{/posts/new}" class="text-white mr-3">Create New Post</a>
+                <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="text-white">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Posts Section -->
+    <div class="container my-5">
+        <div class="row">
+            <div th:if="${posts != null}" class="col-md-8 offset-md-2">
+                <ul class="list-group">
+                    <li th:each="post : ${posts}" class="list-group-item mb-3 shadow-sm">
+                        <h2 class="h4 mb-2">
+                            <a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}" class="text-dark"></a>
+                        </h2>
+                        <p tth:text="${#strings.replace(post.content, '<[^>]*>', '')}" class="text-muted mb-2"></p>
+                        <small class="text-secondary">Posted by <span th:text="${post.username}"></span></small>
+                        <div class="mt-3">
+                            <a th:href="@{'/posts/' + ${post.id}}" class="btn btn-sm btn-outline-primary mr-2">
+                                <i class="fas fa-book-open"></i> Read More
+                            </a>
+                            <a th:href="@{'/posts/' + ${post.id} + '/edit'}" sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-warning mr-2">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a th:href="@{'/posts/' + ${post.id} + '/delete'}" sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div th:if="${posts == null || posts.size() == 0}" class="col-md-8 offset-md-2 text-center">
+                <p class="text-muted">No posts available.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light py-3">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Your Blog. All rights reserved.</p>
+        </div>
+    </footer>
+    <link rel="stylesheet" th:href="@{/css/getall.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</body>
+</html>

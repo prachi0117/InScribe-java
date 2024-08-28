@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Content Hub</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="@{/css/header.css}">
+
+     <!-- Link to your CSS file -->
+</head>
+<body>
+<header th:fragment="header">
+      <!-- Header with Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-feather-pointed" style="color: #c7ccd6;"></i>
+            InScribe
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link signup-btn" href="/register">Signup</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item mx-auto" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/all}">My Blog</a>
+                </li>
+                <li class="nav-item mx-auto" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/all}">All Posts</a>
+                </li>
+                <li class="nav-item mx-auto" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/new}"><i class="fa-solid fa-pen-to-square" style="color: #eaeaeb;"></i>New Blog</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    <a class="nav-link">Welcome <span sec:authentication="name">name</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

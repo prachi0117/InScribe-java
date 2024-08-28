@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/head :: head"></head>
+    
+    <!-- Bootstrap CSS (Internal Style) -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-custom {
+            background: linear-gradient(to right, #5a3d78, #2a5298); /* Gradient background */
+            border-bottom: 3px solid #ffffff;
+            padding: 10px 20px;
+        }
+        .navbar-custom .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.75rem;
+        }
+        .navbar-custom .navbar-brand i {
+            margin-right: 10px;
+        }
+        .navbar-custom .nav-link {
+            color: #ffffff;
+            font-size: 1.125rem;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #d3d3d3;
+        }
+        .navbar-custom .nav-item .signup-btn {
+            border-radius: 50px;
+            background-color: #ff5722;
+            color: #ffffff;
+            padding: 5px 20px;
+            margin-right: 10px;
+        }
+        .navbar-custom .navbar-nav .nav-item.centered-item {
+            display: flex;
+            justify-content: space-between;
+            
+            
+        }
+        .navbar-custom .navbar-nav .nav-item.right-item {
+            display: flex;
+            margin-left: auto;
+        }
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            background-color: #f7efe5;
+            text-align: center;
+            flex-direction: column;
+        }
+        .hero-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: #5a3d78;
+            margin-bottom: 10px;
+        }
+        .hero-section p {
+            font-size: 1.25rem;
+            color: #5a3d78;
+        }
+        .spotlight-section {
+            background-color: #f0f4f8;
+            padding: 50px 0;
+        }
+        .spotlight-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #5a3d78;
+        }
+        .spotlight-card {
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 20px;
+            background: #ffffff;
+            transition: transform 0.3s ease-in-out;
+        }
+        .spotlight-card img {
+            border-radius: 15px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .spotlight-card:hover {
+            transform: translateY(-10px);
+        }
+        .spotlight-card h3 {
+            font-size: 1.5rem;
+            color: #5a3d78;
+            margin-bottom: 10px;
+        }
+        .spotlight-card p {
+            font-size: 1rem;
+            color: #7d7d7d;
+            margin-bottom: 20px;
+        }
+        .spotlight-card .read-more {
+            color: #ff5722;
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+        .spotlight-card .read-more i {
+            margin-left: 5px;
+        }
+        .footer {
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            background-color: #5a3d78;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header with Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-feather-pointed" style="color: #c7ccd6;"></i>
+            InScribe
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link signup-btn" href="/register">Signup</a>
+                </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+           
+                <li class="nav-item centered-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/all}">My Blog</a>
+                </li>
+                <li class="nav-item centered-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/all}">All Posts</a>
+                </li>
+                <li class="nav-item centered-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/posts/new}"><i class="fa-solid fa-pen-to-square" style="color: #eaeaeb;"></i>New Blog</a>
+                </li>
+                <li class="nav-item right-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link">Welcome <span sec:authentication="name">name</span></a>
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1>Welcome to InScribe</h1>
+        <p>Your go-to platform for all things content. Explore, create, and connect with the best content available.</p>
+    </div>
+
+    <!-- Spotlight Section -->
+    <div class="spotlight-section">
+        <div class="container">
+            <h2>In the Spotlight...</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="spotlight-card">
+                        <img src="image1.jpg" alt="Spotlight Image 1">
+                        <h3>Spotlight Article 1</h3>
+                        <p>A brief description of the article goes here.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="spotlight-card">
+                        <img src="image2.jpg" alt="Spotlight Image 2">
+                        <h3>Spotlight Article 2</h3>
+                        <p>A brief description of the article goes here.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="spotlight-card">
+                        <img src="image3.jpg" alt="Spotlight Image 3">
+                        <h3>Spotlight Article 3</h3>
+                        <p>A brief description of the article goes here.</p>
+                        <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 InScribe. All rights reserved.</p>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.8/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>
