@@ -14,7 +14,6 @@ import com.programming.springblog.dto.LoginRequest;
 import com.programming.springblog.dto.RegisterRequest;
 import com.programming.springblog.service.AuthService;
 
-import io.jsonwebtoken.lang.Collections;
 
 @RestController
 @RequestMapping("/api/auth")

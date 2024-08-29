@@ -74,9 +74,9 @@ public class SecurityConfig {
 
 
 
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+    // public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    //     authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

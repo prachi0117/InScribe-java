@@ -1,5 +1,6 @@
 package com.programming.springblog.service;
 
+import com.programming.springblog.dto.CommentDto;
 import com.programming.springblog.dto.PostDto;
 import com.programming.springblog.model.Post;
 
@@ -28,6 +29,12 @@ public interface PostService {
 
     //search posts
     List<Post> searchPosts(String keyword);
+
+    CommentDto createComment(CommentDto commentDto, Integer postId);
+
+	void deleteComment(Integer commentId);
+
+
 
     
 }

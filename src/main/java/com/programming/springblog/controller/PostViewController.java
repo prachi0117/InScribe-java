@@ -1,9 +1,11 @@
 package com.programming.springblog.controller;
 
+import com.programming.springblog.dto.CommentDto;
 import com.programming.springblog.dto.PostDto;
 import com.programming.springblog.exception.ResourceNotFoundException;
 import com.programming.springblog.model.User;
 import com.programming.springblog.repository.UserRepository;
+import com.programming.springblog.service.CommentService;
 import com.programming.springblog.service.PostService;
 
 import java.security.Principal;
@@ -26,6 +28,10 @@ public class PostViewController {
     @Autowired
     private PostService postService;
 
+    
+    @Autowired
+    private CommentService commentService;
+
     // Display form to create a new post create new post
     @GetMapping("/new")
     public String showCreatePostForm(Model model) {
@@ -47,6 +53,22 @@ public class PostViewController {
         return "redirect:/posts/" + createdPost.getId(); // Redirects to the post's detail page
     }
 
+    @PostMapping("/{postId}/comment")
+    public String submitComment(@PathVariable("postId") Integer postId,
+    @RequestParam("content") String content, 
+    @RequestParam("username") String username) {
+    // Handle saving the comment
+    CommentDto commentDto = new CommentDto();
+    commentDto.setContent(content);
+    commentDto.setUsername(username);
+    commentDto.setPostId(postId);  // Ensure the postId is set
+
+    // Assuming you have a service to save the comment
+    commentService.saveComment(commentDto);
+
+    // Redirect back to the post's detail page
+    return "redirect:/posts/" + postId;
+    }
     
     private Integer getUserIdFromPrincipal(Principal principal) {
         // Assuming the principal name is the username (email, etc.)

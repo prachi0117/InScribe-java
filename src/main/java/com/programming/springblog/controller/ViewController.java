@@ -1,9 +1,12 @@
 package com.programming.springblog.controller;
 
+import com.programming.springblog.dto.CommentDto;
 import com.programming.springblog.dto.LoginRequest;
 import com.programming.springblog.dto.PostDto;
 import com.programming.springblog.dto.RegisterRequest;
+import com.programming.springblog.model.User;
 import com.programming.springblog.service.AuthService;
+import com.programming.springblog.service.CommentService;
 import com.programming.springblog.service.EmailService;
 import com.programming.springblog.service.PostService;
 
@@ -13,12 +16,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.validation.Valid;
@@ -29,10 +35,11 @@ public class ViewController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private EmailService emailService;
+    @Autowired 
+    private PostService postService;
 
-    @Autowired PostService postService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -78,30 +85,14 @@ public class ViewController {
         return "redirect:/?success=true"; // Redirect to home page on successful login
     }
     
+    @PostMapping("/{postId}/comment")
+    public String addComment(@PathVariable("postId") int postId, @RequestParam("content") String content) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setContent(content);
+        commentDto.setId(postId);
+        commentService.createComment(commentDto, postId);
+        return "redirect:/posts/" + postId;
+    }
 
-    
-    // @GetMapping("/createNewPost")
-    // public String showCreatePostForm(Model model) {
-    //     model.addAttribute("post", new PostDto());
-    //     return "postform";
-    // }
-
-
-   
-
-    // @PostMapping("/send-email")
-    // @ResponseBody
-    // public ResponseEntity<String> sendEmail(@RequestBody Map<String, String> payload) {
-    //     String username = payload.get("username");
-    //     String homePageUrl = "http://localhost:8080/";
-    //     String emailText = "You have successfully logged in. You can access the home page using the following link: " + homePageUrl;
-
-    //     try {
-    //         emailService.sendEmail(username, "Login Successful", emailText);
-    //         return ResponseEntity.ok("Email sent successfully");
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email");
-    //     }
-    // }
 
 }
