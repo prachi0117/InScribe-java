@@ -45,16 +45,15 @@ public class PostController {
 
 	// get post details by id
 	@GetMapping("/posts/{postId}")
-	public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId) {
+public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
+    PostDto postDto = this.postService.getPostById(postId);
+    return new ResponseEntity<>(postDto, HttpStatus.OK);
+}
 
-		PostDto postDto = this.postService.getPostById(postId);
-		return new ResponseEntity<PostDto>(postDto, HttpStatus.OK);
-
-	}
 
     // delete post
 	@DeleteMapping("/posts/{postId}")
-	public ApiResponse deletePost(@PathVariable Integer postId) {
+	public ApiResponse deletePost(@PathVariable Long postId) {
 		this.postService.deletePost(postId);
 		return new ApiResponse("Post is successfully deleted !!", true);
 	}
@@ -62,7 +61,7 @@ public class PostController {
 	// update post
 
 	@PutMapping("/posts/{postId}")
-	public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Integer postId) {
+	public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable Long postId) {
 
 		PostDto updatePost = this.postService.updatePost(postDto, postId);
 		return new ResponseEntity<PostDto>(updatePost, HttpStatus.OK);

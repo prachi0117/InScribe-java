@@ -1,19 +1,18 @@
 package com.programming.springblog.dto;
 
-import org.springframework.data.jpa.repository.Query;
+import java.time.Instant;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 public class CommentDto {
-	
-	private int id;
-
-	private String content;
-
-	private int postId;
-	private String username;
-
+    private Integer id;
+    private String content;
+    private String username; // To hold the username of the comment's author
+    private Long postId;
+    private Instant createdOn;
 }

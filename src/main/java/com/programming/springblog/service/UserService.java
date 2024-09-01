@@ -1,25 +1,24 @@
 package com.programming.springblog.service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
-import com.programming.springblog.model.User;
-import com.programming.springblog.repository.UserRepository;
+import java.util.List;
 
-@Service
-public class UserService {
+import com.programming.springblog.dto.UserDto;
 
-    @Autowired
-    private UserRepository userRepository;
+public interface UserService {
 
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User) {
-            String username = ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
-            return userRepository.findByUserName(username).orElse(null);
-        }
-        return null;
-    }
+	UserDto registerNewUser(UserDto user);
+	
+	
+	UserDto createUser(UserDto user);
+
+	UserDto updateUser(UserDto user, Integer userId);
+
+	UserDto getUserById(Integer userId);
+
+	List<UserDto> getAllUsers();
+
+	void deleteUser(Integer userId);
+
+    String getUserNameById(Integer userId);
+
 }
-

@@ -4,7 +4,10 @@ import com.programming.springblog.dto.CommentDto;
 import com.programming.springblog.dto.LoginRequest;
 import com.programming.springblog.dto.PostDto;
 import com.programming.springblog.dto.RegisterRequest;
+import com.programming.springblog.exception.ResourceNotFoundException;
+import com.programming.springblog.model.Post;
 import com.programming.springblog.model.User;
+import com.programming.springblog.repository.PostRepository;
 import com.programming.springblog.service.AuthService;
 import com.programming.springblog.service.CommentService;
 import com.programming.springblog.service.EmailService;
@@ -40,6 +43,9 @@ public class ViewController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private PostRepository postRepository;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -85,14 +91,7 @@ public class ViewController {
         return "redirect:/?success=true"; // Redirect to home page on successful login
     }
     
-    @PostMapping("/{postId}/comment")
-    public String addComment(@PathVariable("postId") int postId, @RequestParam("content") String content) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setContent(content);
-        commentDto.setId(postId);
-        commentService.createComment(commentDto, postId);
-        return "redirect:/posts/" + postId;
-    }
+    
 
 
 }

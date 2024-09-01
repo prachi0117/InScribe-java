@@ -14,8 +14,7 @@ import java.security.Key;
 @Service
 public class JwtProvider {
 
-    private Key key;
-    
+    private static Key key ;
     public JwtProvider() {
         try {
             this.key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
@@ -41,6 +40,9 @@ public class JwtProvider {
                 .signWith(key) 
                 .compact();
     }
+
+   
+
     
 
     public boolean validateToken(String jwt) {
@@ -62,4 +64,20 @@ public class JwtProvider {
 
         return claims.getSubject();
     }
+
+    // public Integer retrieveUserId(String jwtString) {
+    //     Claims claims = Jwts.parserBuilder()
+    //                         .setSigningKey(key)
+    //                         .build()
+    //                         .parseClaimsJws(jwtString)
+    //                         .getBody();
+        
+    //     String userIdStr = claims.get("userId", String.class); // Assuming the user ID is stored as a claim with the key "userId"
+        
+    //     try {
+    //         return Integer.valueOf(userIdStr);
+    //     } catch (NumberFormatException e) {
+    //         throw new IllegalArgumentException("Invalid user ID in JWT", e);
+    //     }
+    // }
 }

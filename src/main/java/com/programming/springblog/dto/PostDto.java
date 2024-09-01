@@ -2,6 +2,7 @@ package com.programming.springblog.dto;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.programming.springblog.model.Comment;
@@ -19,7 +20,7 @@ public class PostDto {
     private String title;
     private String username;
     
-	private Set<CommentDto> comments=new HashSet<>();
+	private List<CommentDto> comments;
 
     // public PostDto(String title, String content) {
     //     this.title = title;
