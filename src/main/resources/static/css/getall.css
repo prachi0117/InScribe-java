@@ -1,0 +1,73 @@
+/* Style for the post card */
+.post-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px); /* Adds a subtle lift effect on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Enhances the shadow on hover */
+}
+
+/* Container for the post image */
+.post-image-container {
+    height: 200px; /* Fixed height for the image container */
+    background-color: #f8f9fa; /* Light background color to fill any empty space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Image styling */
+.post-image-container {
+    height: 200px; /* Fixed height */
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.post-image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Styling for the card body */
+.post-card .card-body {
+    background-color: #ffffff; /* White background for the card content */
+    padding: 20px; /* Adds padding around the card content */
+    border-radius: 0 0 10px 10px; /* Smoothly rounds the bottom corners */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Subtle inner shadow for depth */
+}
+
+/* Button styles */
+.post-card .btn {
+    border-radius: 20px; /* Adds a rounded style to buttons */
+    transition: background-color 0.3s, color 0.3s; /* Smooth color transition */
+}
+
+.post-card .btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.post-card .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #ffffff;
+}
+
+.post-card .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* Add some margin between the card content and the footer */
+footer {
+    margin-top: 40px;
+}
+

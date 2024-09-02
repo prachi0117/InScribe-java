@@ -19,6 +19,8 @@ public class PostDto {
     private String content;
     private String title;
     private String username;
+
+    private String imageUrl;
     
 	private List<CommentDto> comments;
 

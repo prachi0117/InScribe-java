@@ -61,35 +61,53 @@ body {
 } */
 
 .navbar-custom {
-background: linear-gradient(to right, #5a3d78, #2a5298); /* Gradient background */
-border-bottom: 3px solid #ffffff;
-padding: 10px 20px;
+    background: linear-gradient(135deg, #5a3d78, #2a5298); /* Gradient background */
+    border-bottom: 3px solid #ffffff;
+    padding: 10px 20px;
 }
 .navbar-custom .navbar-brand {
-display: flex;
-align-items: center;
-color: #ffffff;
-font-weight: bold;
-font-size: 1.75rem;
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1.95rem;
+    font-family: "Satisfy", cursive;
+    font-weight: 500;
 }
 .navbar-custom .navbar-brand i {
-margin-right: 10px;
+    margin-right: 10px;
 }
 .navbar-custom .nav-link {
-color: #ffffff;
-font-size: 1.125rem;
+    color: #ffffff;
+    font-size: 1.125rem;
 }
 .navbar-custom .nav-link:hover {
-color: #d3d3d3;
+    color: #d3d3d3;
 }
 .navbar-custom .nav-item .signup-btn {
-border-radius: 50px;
-background-color: #ff5722;
-color: #ffffff;
-padding: 5px 20px;
-margin-right: 10px;
+    border-radius: 50px;
+    background-color: #ff5722;
+    color: #ffffff;
+    padding: 5px 20px;
+    margin-right: 10px;
 }
 
+.navbar-custom .nav-item .logout-btn {
+    border-radius: 50px;
+    background-color: #ff5722;
+    color: #ffffff;
+    padding: 5px 20px;
+    margin-right: 10px;
+}
+.navbar-custom .navbar-nav .nav-item.centered-item {
+    display: flex;
+    justify-content: space-between;
+    
+    
+}
+.navbar-custom .navbar-nav .nav-item.right-item {
+    display: flex;
+    margin-left: auto;
+}
 .posts_wrapper {
     display: flex;
     border:1px solid rgb(121, 44, 44);

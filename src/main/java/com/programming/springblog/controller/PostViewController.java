@@ -12,7 +12,14 @@ import com.programming.springblog.service.PostService;
 
 import java.security.Principal;
 import java.util.Map;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import java.util.List;
+
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -36,6 +43,8 @@ public class PostViewController {
     @Autowired
     private CommentService commentService;
 
+
+   
     // Display form to create a new post
     @GetMapping("/new")
     public String showCreatePostForm(Model model) {
@@ -50,10 +59,26 @@ public class PostViewController {
         // Create a new PostDto manually from form data
         PostDto postDto = new PostDto();
         postDto.setTitle(formData.get("title"));
-        postDto.setContent(formData.get("content"));
+        String cleanedContent = cleanContent(formData.get("content"));
+        postDto.setContent(cleanedContent);
 
         PostDto createdPost = postService.createPost(postDto, userId);
         return "redirect:/posts/" + createdPost.getId(); // Redirects to the post's detail page
+    }
+
+    private String cleanContent(String htmlContent) {
+        Document document = Jsoup.parse(htmlContent);
+        
+        // Select all <div> elements containing an <img> tag
+        Elements divsWithImages = document.select("div:has(img)");
+
+        // Remove these <div> elements
+        for (Element div : divsWithImages) {
+            div.remove();
+        }
+        
+        return document.body().html(); // Return the cleaned
+        
     }
 
     private Integer getUserIdFromPrincipal(Principal principal) {
@@ -67,6 +92,14 @@ public class PostViewController {
     @GetMapping("/all")
     public String viewAllPosts(Model model) {
         List<PostDto> posts = postService.getAllPost();
+
+        
+        for (PostDto post : posts) {
+            String cleanedContent = cleanContent(post.getContent());
+            post.setContent(cleanedContent);
+        }
+        
+        
         model.addAttribute("posts", posts);
         return "getallpost"; // The name of the Thymeleaf template for displaying posts
     }
@@ -110,6 +143,26 @@ public class PostViewController {
     public String deletePost(@PathVariable("postId") Long postId) {
         postService.deletePost(postId);
         return "redirect:/posts/all"; // redirects to the list of all posts after deletion
+    }
+
+    @GetMapping("/{postId}/delete")
+    public String deletePostGet(@PathVariable("postId") Long postId) {
+        postService.deletePost(postId);
+        return "redirect:/posts/all"; // Redirect to the list of all posts after deletion
+    }
+
+    @GetMapping("/user/{id}")
+    public String viewPostsByUser(@PathVariable("id") Integer userId, Model model) {
+        List<PostDto> posts = postService.getPostsByUser(userId);
+
+        // Clean the content of each post to remove divs with images (if needed)
+        for (PostDto post : posts) {
+            String cleanedContent = cleanContent(post.getContent());
+            post.setContent(cleanedContent);
+        }
+
+        model.addAttribute("posts", posts);
+        return "getallpost"; // The name of the Thymeleaf template for displaying the user's posts
     }
 
     // Handle comment submission

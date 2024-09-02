@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
+import org.jsoup.Jsoup;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,9 +103,24 @@ public class PostServiceImpl implements PostService {
                 .map(post -> {
                     PostDto postDto = modelMapper.map(post, PostDto.class);
                     postDto.setUsername(post.getUser().getUserName());
+
+                    String imageUrl = extractFirstImageUrl(post.getContent());
+                    postDto.setImageUrl(imageUrl);
+
                     return postDto;
                 })
                 .collect(Collectors.toList());
+    }
+
+    private String extractFirstImageUrl(String content) {
+        if (content != null && content.contains("<img")) {
+            Document doc = (Document) Jsoup.parse(content);
+            Element img = doc.select("img").first();
+            if (img != null) {
+                return img.attr("src");
+            }
+        }
+        return "/images/spotlight2.jpg"; // Return a default image URL if none found
     }
 
     @Override

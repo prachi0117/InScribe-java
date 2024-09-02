@@ -3,49 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>All Posts</title>
-    <link rel="stylesheet" th:href="@{/css/getall.css}"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" th:href="@{/css/getall.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Ensure images have a fixed size */
+        .post-image {
+            width: 100%; /* Make image fill the container width */
+            max-height: 200px; /* Set a maximum height */
+            object-fit: cover; /* Crop image to fit the dimensions */
+            display: block; /* Remove extra space below image */
+        }
+        .post-content {
+            max-height: 150px; /* Limit the height of content */
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Add ellipsis for overflow */
+        }
+    </style>
 </head>
 <body>
 
-    
     <!-- Header -->
-    <header class="bg-primary text-white py-3">
-        <div class="container">
-            <h1 class="mb-0">All Posts</h1>
-            <nav class="mt-2">
-                <a th:href="@{/}" class="text-white mr-3">Home</a>
-                <a th:href="@{/posts/new}" class="text-white mr-3">Create New Post</a>
-                <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="text-white">Logout</a>
-            </nav>
-        </div>
-    </header>
+    <div th:replace="/fragments/header :: header"></div>
 
     <!-- Posts Section -->
     <div class="container my-5">
         <div class="row">
-            <div th:if="${posts != null}" class="col-md-8 offset-md-2">
-                <ul class="list-group">
-                    <li th:each="post : ${posts}" class="list-group-item mb-3 shadow-sm">
-                        <h2 class="h4 mb-2">
-                            <a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}" class="text-dark"></a>
-                        </h2>
-                        <p tth:text="${#strings.replace(post.content, '<[^>]*>', '')}" class="text-muted mb-2"></p>
-                        <small class="text-secondary">Posted by <span th:text="${post.username}"></span></small>
-                        <div class="mt-3">
-                            <a th:href="@{'/posts/' + ${post.id}}" class="btn btn-sm btn-outline-primary mr-2">
-                                <i class="fas fa-book-open"></i> Read More
-                            </a>
-                            <a th:href="@{'/posts/' + ${post.id} + '/edit'}" sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-warning mr-2">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
-                            <a th:href="@{'/posts/' + ${post.id} + '/delete'}" sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-danger">
-                                <i class="fas fa-trash-alt"></i> Delete
-                            </a>
+            <div th:if="${posts != null}" class="col-md-12">
+                <div class="row">
+                    <div th:each="post : ${posts}" class="col-md-4 mb-4">
+                        <div class="card shadow-sm h-100 post-card">
+                            <div class="card-img-top post-image-container">
+                                <img th:src="${post.imageUrl}" alt="Post Image" class="post-image">
+                            </div>
+                            <div class="card-body bg-light">
+                                <h5 class="card-title">
+                                    <a th:href="@{'/posts/' + ${post.id}}" th:text="${post.title}" class="text-dark"></a>
+                                </h5>
+                                <!-- Render the content as text without images -->
+                                <p th:utext="${post.content}" class="card-text text-muted post-content"></p>
+                                <div class="mt-3">
+                                    <a th:href="@{'/posts/' + ${post.id}}" class="btn btn-sm btn-outline-primary mr-2">
+                                        <i class="fas fa-book-open"></i> Read More
+                                    </a>
+                                    <a th:href="@{'/posts/' + ${post.id} + '/edit'}" sec:authorize="isAuthenticated()" class="btn btn-sm btn-outline-warning mr-2">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="#" th:href="@{'/posts/' + ${post.id} + '/delete'}" sec:authorize="isAuthenticated()"
+                                       class="btn btn-sm btn-outline-danger" onclick="confirmDelete(event, this)">
+                                       <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
-            <div th:if="${posts == null || posts.size() == 0}" class="col-md-8 offset-md-2 text-center">
+            <div th:if="${posts == null || posts.size() == 0}" class="col-md-12 text-center">
                 <p class="text-muted">No posts available.</p>
             </div>
         </div>
@@ -54,12 +68,33 @@
     <!-- Footer -->
     <footer class="bg-light py-3">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 Your Blog. All rights reserved.</p>
+            <p class="mb-0">&copy; 2024 InScribe. All rights reserved.</p>
         </div>
     </footer>
-    <link rel="stylesheet" th:href="@{/css/getall.css}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDelete(event, element) {
+            event.preventDefault(); // Prevent the default action of the link
+    
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = element.getAttribute('href'); // If confirmed, proceed with deletion
+                }
+            });
+        }
+        </script>
 </body>
 </html>

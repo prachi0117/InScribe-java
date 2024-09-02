@@ -48,14 +48,40 @@
         if (urlParams.has('success')) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Registration successful! Please log in.',
+                text: 'Registration successful! Please check the mail to log in.',
                 icon: 'success',
+                allowOutsideClick: false,
+                timer: 5000, 
                 timerProgressBar: true,
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
                 },
                 hideClass: {
                     popup: 'animate__animated animate__fadeOutUp'
+                }
+            });
+        }
+
+        if (urlParams.has('error')) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error during Login. Please try again.',
+                icon: 'error',
+                timerProgressBar: true,
+                showConfirmButton: true,  // Show a confirmation button
+            // Show a cancel button
+            timer:5000,
+                
+                allowOutsideClick: false,  // Prevent closing by clicking outside
+                showClass: {
+                    popup: 'animate__animated animate__shakeX'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.reload();  // Reload the page to retry registration
                 }
             });
         }

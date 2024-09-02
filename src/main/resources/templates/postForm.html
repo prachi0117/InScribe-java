@@ -1,52 +1,106 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragments/head :: head">
-  
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create or Edit Post</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            background: #f4f4f9; /* Light background color */
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+            background: #fff; /* White background for the form */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333; /* Darker text color for better readability */
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .alert-red {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+        .green-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
+        }
+        .green-btn:hover {
+            background-color: #218838;
+        }
+        .float-left {
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
 
-<div th:replace="/fragments/header :: header"></div>
+    <div th:replace="/fragments/header :: header"></div>
 
-<div class="container">
-   
-    <form th:action="@{'/posts/new'}" th:object="${post}" method="post">
-        <h2>Write new post</h2>
-        <div>
-            <label>
-                <div class="alert-red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
-                <input type="text" th:field="*{title}" placeholder="Title" required/>
-            </label>
-        </div>
-        <div>
-            <label>
-                <div class="alert-red" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content Error</div>
-                <textarea id="content" th:field="*{content}" placeholder="Share your Thoughts" required></textarea>
-            </label>
-        </div>
-        <!-- Hidden input to include userId, if necessary -->
-        <input type="hidden" name="userId" value="1"/> <!-- Replace '1' with the actual user ID -->
-        <div class="float-left">
-            <button class="green-btn" type="submit">Send</button>
-        </div>
-    </form>
-        
-    </div> 
-</div>
-<script type="text/javascript" th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/richtext/jquery.richtext.min.js}"></script>
-<script type="text/javascript">
-    if (typeof jQuery !== 'undefined') {
-        $(document).ready(function() {
-            $('#content').richText();
-        });
-    } else {
-        console.error('jQuery is not loaded');
-    }
- </script>
- 
+    <div class="container">
+        <form th:action="@{${post.id} != null ? '/posts/' + ${post.id} + '/edit' : '/posts/new'}" th:object="${post}" method="post">
+            <h2 th:text="${post.id} != null ? 'Edit Post' : 'Create New Post'"></h2>
+            <div class="form-group">
+                <label for="title">
+                    <div class="alert-red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</div>
+                    <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Title" required/>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="content">
+                    <div class="alert-red" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content Error</div>
+                    <textarea id="content" th:field="*{content}" class="form-control" placeholder="Share your thoughts" required></textarea>
+                </label>
+            </div>
+            <!-- Hidden input to include userId, if necessary -->
+            <input type="hidden" name="userId" value="1"/> <!-- Replace '1' with the actual user ID -->
+            <div class="float-left">
+                <button class="green-btn" type="submit" th:text="${post.id} != null ? 'Update' : 'Send'"></button>
+            </div>
+        </form>
+    </div>
 
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/richtext/jquery.richtext.min.js}"></script>
+    <script type="text/javascript">
+        if (typeof jQuery !== 'undefined') {
+            $(document).ready(function() {
+                $('#content').richText();
+            });
+        } else {
+            console.error('jQuery is not loaded');
+        }
+    </script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </body>
 </html>
