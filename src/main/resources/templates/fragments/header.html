@@ -1,11 +1,107 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <head th:replace="/fragments/head :: head"></head>
+    <head >
     <meta charset="UTF-8">
-    <title>Content Hub</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Content Hub</title><link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="@{/css/header.css}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar-custom {
+            background: linear-gradient(to right, #5a3d78, #553894); 
+            border-bottom: 3px solid #ffffff;
+            padding: 10px 20px;
+        }
+        
+        
+        .navbar-custom {
+            background-color: #f8f9fa; /* Light background color */
+            border-bottom: 1px solid #ddd; 
+        }
+        
+        .navbar-nav .nav-link {
+            color: #333; /* Dark color for text */
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #007bff; /* Highlight color on hover */
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem; /* Larger brand text */
+        }
+        
+        .logout-btn {
+            font-size: 0.875rem; /* Smaller font size for logout button */
+            color: #555; /* Dark color for text */
+        }
+        
+        .navbar-custom .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.95rem;
+            font-family: "Satisfy", cursive;
+            font-weight: 500;
+        }
+        .navbar-custom .navbar-brand i {
+            margin-right: 10px;
+        }
+        .navbar-custom .nav-link {
+            color: #ffffff;
+            font-size: 1.125rem;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #d3d3d3;
+        }
+        .navbar-custom .nav-item .signup-btn {
+            border-radius: 50px;
+            background-color: #ff5722;
+            color: #ffffff;
+            padding: 5px 20px;
+            margin-right: 10px;
+        }
+        .navbar-custom .navbar-nav .nav-item.centered-item {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .navbar-custom .navbar-nav .nav-item.right-item {
+            display: flex;
+            margin-left: auto;
+        }
+        
+        .navbar-custom .nav-item .logout-btn {
+            border-radius: 50px;
+            background-color: #ff5722;
+            color: #ffffff;
+            padding: 5px 20px;
+            margin-right: 10px;
+        } 
+        
+        .navbar-nav-unauth {
+            display: none; /* Hide by default */
+        }
+        
+        #unauth {
+            margin-left: auto; /* Push the element to the right side */
+            display: flex; /* Ensures the child elements align horizontally */
+            align-items: center; /* Aligns items vertically centered */
+        }
+        
+        #unauth .nav-item {
+            margin-left: 10px; /* Adds space between the items */
+        }
+        
+        /* Show .navbar-nav-unauth only when the user is not authenticated */
+        .sec-unauthenticated .navbar-nav-unauth {
+            display: flex;
+        }
+    </style>
+   
 </head>
 <body>
 <header th:fragment="header">
@@ -28,9 +124,9 @@
                 </li>
             </ul>
             <ul class="navbar-nav mx-auto">
-               <!--- <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{'/posts/user/' + ${#authentication.principal.id}}">My Blog</a>
-                </li> -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{'/posts/user'}">My Blog</a>
+                </li> 
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/posts/all}">All Posts</a>
                 </li>
@@ -49,5 +145,6 @@
         </div>
     </nav>
 </header>
+
 </body>
 </html>

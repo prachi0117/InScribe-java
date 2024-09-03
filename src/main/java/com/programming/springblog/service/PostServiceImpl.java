@@ -77,6 +77,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> getAllPost() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = modelMapper.map(post, PostDto.class);
+                    postDto.setUsername(post.getUser().getUserName());
+
+                    String imageUrl = extractFirstImageUrl(post.getContent());
+                    postDto.setImageUrl(imageUrl);
+
+                    return postDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private String extractFirstImageUrl(String content) {
+        if (content != null && content.contains("<img")) {
+            // Parse the HTML content to extract the first <img> tag
+            Document doc = Jsoup.parse(content);
+            Element img = doc.selectFirst("img"); // Select the first <img> tag
+    
+            if (img != null) {
+                String imageUrl = img.attr("src");
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    return imageUrl;
+                }
+            }
+        }
+        return "/images/spotlight2.jpg"; // Return a default image URL if none found
+    }
+    
+    @Override
     public PostDto updatePost(PostDto postDto, Long postId) {
         Post post = this.postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("Post ", "post id", postId));
@@ -96,32 +128,7 @@ public class PostServiceImpl implements PostService {
         this.postRepository.delete(post);
     }
 
-    @Override
-    public List<PostDto> getAllPost() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = modelMapper.map(post, PostDto.class);
-                    postDto.setUsername(post.getUser().getUserName());
-
-                    String imageUrl = extractFirstImageUrl(post.getContent());
-                    postDto.setImageUrl(imageUrl);
-
-                    return postDto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    private String extractFirstImageUrl(String content) {
-        if (content != null && content.contains("<img")) {
-            Document doc = (Document) Jsoup.parse(content);
-            Element img = doc.select("img").first();
-            if (img != null) {
-                return img.attr("src");
-            }
-        }
-        return "/images/spotlight2.jpg"; // Return a default image URL if none found
-    }
+   
 
     @Override
     public List<PostDto> getPostsByUser(Integer userId) {
@@ -144,7 +151,11 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post", "post id", postId));
 
         PostDto postDto = this.modelMapper.map(post, PostDto.class);
-        postDto.setUsername(post.getUser().getUserName()); // Setting the username
+        postDto.setUsername(post.getUser().getUserName());
+
+        // Extract the first image URL from the content
+        String imageUrl = extractFirstImageUrl(post.getContent());
+        postDto.setImageUrl(imageUrl);
 
         // Set usernames for comments
         postDto.setComments(post.getComments().stream()
@@ -163,4 +174,5 @@ public class PostServiceImpl implements PostService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'searchPosts'");
     }
+
 }

@@ -1,6 +1,7 @@
 package com.programming.springblog.dto;
 
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,6 @@ public class PostDto {
     private String username;
 
     private String imageUrl;
-    
 	private List<CommentDto> comments;
 
     // public PostDto(String title, String content) {

@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+    <head th:replace="/fragments/head :: head">
     <!-- Bootstrap and FontAwesome -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ 
     <style>
-        /* Your custom styles */
+        /* Custom styles */
+        .post-detail {
+            margin-bottom: 40px;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 400px; /* Set maximum height to control image size */
+            object-fit: cover; /* Ensure image covers the container without distortion */
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            margin-bottom: 30px;
+        }
+
+        .comment-section {
+            margin-top: 40px;
+        }
+
+        .comment-card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .comment-form {
+            border-radius: 15px;
+            background: #f8f9fa;
+            padding: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 767px) {
+            .post-detail {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -15,21 +52,33 @@
     <!-- Post Details -->
     <div class="post-detail" th:if="${post != null}">
         <h2 class="h3 mb-4" th:text="${post.title}">Title</h2>
-        <p th:text="${#strings.replace(post.content, '<[^>]*>', '')}" class="text-muted">Body text</p>
+        
+        <!-- Post Image -->
+        <img th:src="@{${post.imageUrl}}" alt="Post Image" class="post-image" th:if="${post.imageUrl != null}">
 
-        <div>
-            <h3>Comments</h3>
+        <!-- Post Content -->
+        <div class="post-content">
+            <p th:utext="${post.content}" class="text-muted">Body text</p>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <h3 class="mb-4">Comments</h3>
             <div th:each="comment : ${post.comments}">
-                <p>
-                    <strong th:text="${comment.username}">Username</strong>: 
-                    <span th:text="${comment.content}">Comment Content</span>
-                </p>
+                <div class="card comment-card shadow-sm">
+                    <div class="card-body">
+                        <p>
+                            <strong th:text="${comment.username}">Username</strong>:
+                            <span th:text="${comment.content}">Comment Content</span>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Comment Form -->
         <div class="container align-center my-5">
-            <div class="card shadow-lg p-4">
+            <div class="comment-form">
                 <h2 class="text-center mb-4">Leave a Comment</h2>
                 <form th:action="@{/posts/{postId}/comment(postId=${post.id})}" th:object="${commentDto}" method="post">
                     <div class="form-group">
@@ -37,7 +86,7 @@
                         <textarea id="commentContent" class="form-control" th:field="*{content}" placeholder="Write your comment here..." required></textarea>
                     </div>
                     <input type="hidden" th:field="*{postId}" th:value="${post.id}" />
-                    <div class="form-group">
+                    <div class="form-group text-center">
                         <button class="btn btn-primary" type="submit">Submit Comment</button>
                     </div>
                 </form>
@@ -50,6 +99,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 
 </body>
 </html>

@@ -1,8 +1,153 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head th:replace="/fragments/head :: head">
-    <link rel="stylesheet" href="../static/css/register.css">
+<head >
+    <style>
+        .navbar-custom {
+            background: linear-gradient(135deg, #5a3d78, #2a5298); /* Gradient background */
+            border-bottom: 3px solid #ffffff;
+            padding: 10px 20px;
+        }
+        .navbar-custom .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: #ffffff;
+            font-size: 1.95rem;
+            font-family: "Satisfy", cursive;
+            font-weight: 500;
+        }
+        .navbar-custom .navbar-brand i {
+            margin-right: 10px;
+        }
+        .navbar-custom .nav-link {
+            margin-left:10px;
+            color: #ffffff;
+
+            font-size: 1.125rem;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #d3d3d3;
+        }
+        .navbar-custom .nav-item .signup-btn {
+            border-radius: 50px;
+            background-color: #ff5722;
+            color: #ffffff;
+            padding: 5px 20px;
+            margin-right: 10px;
+        }
+
+        .navbar-custom .nav-item .logout-btn {
+            border-radius: 50px;
+            background-color: #ff5722;
+            color: #ffffff;
+            padding: 7px 17px;
+            margin-right: 10px;
+        }
+        
+        .navbar-custom .navbar-nav .nav-item.centered-item {
+            display: flex;
+            justify-content: space-between;
+            
+            
+        }
+        .navbar-custom .navbar-nav .nav-item.right-item {
+            display: flex;
+            margin-left: auto;
+        }
+
+        .container-custom {
+            display: flex;
+            min-height: 100vh;
+        }
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #e3a1ff, #b993d6); /* Light purple gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+        .right-panel {
+            flex: 1;
+            padding: 20px;
+        }
+        .animation-container {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        /* Example animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animated-content {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            resize: none;
+        }
+        .card {
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            background-color: #f8f9fa;
+        }
+        
+        .btn-primary {
+            background-color: #5a67d8;
+            border-color: #5a67d8;
+        }
+        
+        .btn-primary:hover {
+            background-color: #434190;
+            border-color: #434190;
+        }
+        
+        .input-group .input-group-append .btn {
+            background-color: #e2e8f0;
+            border-color: #cbd5e0;
+        }
+        
+        .input-group .input-group-append .btn:hover {
+            background-color: #cbd5e0;
+        }
+        
+        .alert-danger {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 0.875rem;
+        }
+    </style>
 
 </head>
 
@@ -10,46 +155,112 @@
 
 <body>
 
-<div th:replace="/fragments/header :: header"></div>
+<div>
 
-
-
-<div class="container align-center my-5">
-    <div class="card shadow-lg p-4">
-        <h2 class="text-center mb-4">Register New User</h2>
-        <form th:action="@{/register}" th:object="${registerRequest}" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
-                <input type="text" id="username" class="form-control" th:field="*{username}" placeholder="Username" pattern="[A-Za-z ]+" title="Only letters and spaces are allowed" required/>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
-                <input type="email" id="email" class="form-control" th:field="*{email}" placeholder="Email" required/>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
-                <div class="input-group">
-                    <input id="password" type="password" class="form-control" th:field="*{password}" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[_&$]).{8,}" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character (_&$)" required/>
-                    
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm Password Error</div>
-                <div class="input-group">
-                    <input id="confirmPassword" type="password" class="form-control" th:field="*{confirmPassword}" placeholder="Confirm Password" required/>
-                    
-                </div>
-            </div>
-            <div class="form-group text-center">
-                <button class="btn btn-primary btn-block" type="submit">Register</button>
-            </div>
-        </form>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="#">
+        <i class="fa-solid fa-feather-pointed" style="color: #c7ccd6;"></i>
+        InScribe
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Signup and Login Buttons (Visible when not authenticated) -->
+        <ul class="navbar-nav ml-auto" sec:authorize="!isAuthenticated()">
+            <li class="nav-item">
+                <a class="nav-link signup-btn" href="/register">Signup</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+            </li>
+        </ul>
+        
+        <!-- Blog Navigation Links (Visible when authenticated) -->
+        <ul class="navbar-nav mx-auto" sec:authorize="isAuthenticated()">
+            <li class="nav-item centered-item">
+                <a class="nav-link" th:href="@{/posts/all}">My Blog</a>
+            </li>
+            <li class="nav-item centered-item">
+                <a class="nav-link" th:href="@{/posts/all}">All Posts</a>
+            </li>
+            <li class="nav-item centered-item">
+                <a class="nav-link" th:href="@{/posts/new}">
+                    <i class="fa-solid fa-pen-to-square" style="color: #eaeaeb;"></i> New Blog
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Welcome and Logout (Visible when authenticated) -->
+        <ul class="navbar-nav ml-auto" sec:authorize="isAuthenticated()">
+            <li class="nav-item">
+                <a class="nav-link">Welcome <span sec:authentication="name">name</span></a>
+                <a class="nav-link logout-btn" th:href="@{/logout}">Logout</a>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
+
+<div class="container-custom">
+    <!-- Left Side -->
+    <div class="left-panel">
+        <div class="animation-container">
+            <div class="animated-content">
+                <i class="fas fa-feather-alt fa-3x" style="color: #ffffff;"></i>
+                <h1 style="color: #ffffff; font-family: 'Satisfy', cursive;">Welcome to InScribe</h1>
+            </div>
+        </div>
+        
+    
+       
+    </div>
+
+    <!-- Right Side -->
+    <div class="right-panel">
+       
+
+        <div class="container align-center my-5">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center mb-4">Register New User</h2>
+                <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+                        <input type="text" id="username" class="form-control" th:field="*{username}" placeholder="Username" pattern="[A-Za-z ]+" title="Only letters and spaces are allowed" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+                        <input type="email" id="email" class="form-control" th:field="*{email}" placeholder="Email" required/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+                        <div class="input-group">
+                            <input id="password" type="password" class="form-control" th:field="*{password}" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[_&$]).{8,}" title="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character (_&$)" required/>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Confirm Password Error</div>
+                        <div class="input-group">
+                            <input id="confirmPassword" type="password" class="form-control" th:field="*{confirmPassword}" placeholder="Confirm Password" required/>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-primary btn-block" type="submit">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+       
+    </div>
+
+
+
+
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
