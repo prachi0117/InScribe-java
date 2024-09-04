@@ -27,6 +27,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
 
+    private String imageUrl;
+
     public Long getId() {
         return id;
     }
@@ -68,15 +70,25 @@ public class Post {
     }
 
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+
     // No-argument constructor
     public Post() {}
 
-    public Post(Long id, String title, String content, User user, Set<Comment> comments) {
+    public Post(Long id, String title, String content, User user, Set<Comment> comments,String imageUrl) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.comments = comments;
+        this.imageUrl = imageUrl;
     }
 
 

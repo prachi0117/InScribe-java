@@ -272,11 +272,8 @@
                 text: 'There was an error during Login. Please try again.',
                 icon: 'error',
                 timerProgressBar: true,
-                showConfirmButton: true,  // Show a confirmation button
-            // Show a cancel button
-            timer:5000,
-                
-                allowOutsideClick: false,  // Prevent closing by clicking outside
+                showConfirmButton: true, // Show a confirmation button
+                allowOutsideClick: false, // Prevent closing by clicking outside
                 showClass: {
                     popup: 'animate__animated animate__shakeX'
                 },
@@ -285,10 +282,11 @@
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.reload();  // Reload the page to retry registration
+                    window.location.href = '/login'; // Redirect to login page after clicking OK
                 }
             });
         }
+        
     </script>
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">

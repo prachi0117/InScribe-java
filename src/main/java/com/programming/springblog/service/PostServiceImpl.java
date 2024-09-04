@@ -60,21 +60,29 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDto createPost(PostDto postDto, Integer userId) {
         User user = this.userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User ", "User id", userId));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User", "User id", userId));
+    
+        // Map PostDto to Post entity
         Post post = this.modelMapper.map(postDto, Post.class);
         post.setUser(user);
-
+    
+        // Extract the first image URL from the content and set it
+        String imageUrl = extractFirstImageUrl(post.getContent());
+        post.setImageUrl(imageUrl);
+    
+        // Save the Post entity
         Post newPost = this.postRepository.save(post);
-
+    
         // Convert the saved post to PostDto
         PostDto createdPostDto = this.modelMapper.map(newPost, PostDto.class);
-
-        // Set the username in the PostDto
         createdPostDto.setUsername(user.getUserName());
-
+    
+        // Set the image URL in PostDto as well
+        createdPostDto.setImageUrl(imageUrl);
+    
         return createdPostDto;
     }
+    
 
     @Override
     public List<PostDto> getAllPost() {
@@ -141,6 +149,7 @@ public class PostServiceImpl implements PostService {
                 .map(post -> {
                     PostDto postDto = modelMapper.map(post, PostDto.class);
                     postDto.setUsername(post.getUser().getUserName());
+                    
                     return postDto;
                 })
                 .collect(Collectors.toList());

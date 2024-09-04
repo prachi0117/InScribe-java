@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,39 +61,50 @@ public class PostViewController {
 
     @PostMapping("/new")
     public String createPost(@RequestParam Map<String, String> formData, Principal principal) {
-        Integer userId = getUserIdFromPrincipal(principal); // Get user ID from security context
-
+        Integer userId = getUserIdFromPrincipal(principal);
+    
         // Create a new PostDto manually from form data
         PostDto postDto = new PostDto();
         postDto.setTitle(formData.get("title"));
-       // Extract content and image URL
-       String content = formData.get("content");
-       String imageUrl = extractImageUrl(content);
-       postDto.setImageUrl(imageUrl);
-       String cleanedContent = cleanContent(content, postDto);
-
-       postDto.setContent(cleanedContent);
-        // Set the image URL in the PostDto
     
+        // Extract content and image URL
+        String content = formData.get("content");
+        String imageUrl = extractImageUrl(content);
+        postDto.setImageUrl(imageUrl);
+        
+        String cleanedContent = cleanContent(content, postDto);
+        postDto.setContent(cleanedContent);
+    
+        // Save the post
         PostDto createdPost = postService.createPost(postDto, userId);
-        return "redirect:/posts/" + createdPost.getId(); // Redirects to the post's detail page
+        return "redirect:/posts/" + createdPost.getId();
     }
+
 
     private String extractImageUrl(String htmlContent) {
-        Document document = Jsoup.parse(htmlContent);
-        Element imgElement = document.selectFirst("img");
-        if (imgElement != null) {
-            return imgElement.attr("src"); // Extract the image URL
-        }
-        return null; // Return null if no image URL is found
+    Document document = Jsoup.parse(htmlContent);
+    Element imgElement = document.selectFirst("img");
+    if (imgElement != null) {
+        return imgElement.attr("src");
     }
+    return null;
+}
 
-    private String cleanContent(String htmlContent, PostDto postDto) {
-        Document document = Jsoup.parse(htmlContent);
-        document.select("img").remove(); // Remove <img> tags
-        return document.body().html(); 
-    }
+private String cleanContent(String htmlContent, PostDto postDto) {
+    Document document = Jsoup.parse(htmlContent);
+    Elements imgs = document.select("img");
+    
+    // Keep only image tags, remove everything else
+    document.body().children().remove(); // Remove all child elements
+    document.body().appendChildren(imgs); // Add back only the images
 
+    return document.body().html(); // Return only the cleaned content
+}
+private String cleanAllContent(String htmlContent, PostDto postDto) {
+    Document document = Jsoup.parse(htmlContent);
+    document.select("img").remove();
+    return document.body().html();
+}
     private Integer getUserIdFromPrincipal(Principal principal) {
         String username = principal.getName();
         User user = userRepository.findByUserName(username)
@@ -107,7 +119,7 @@ public class PostViewController {
 
         
         for (PostDto post : posts) {
-            String cleanedContent = cleanContent(post.getContent(),post);
+            String cleanedContent = cleanAllContent(post.getContent(),post);
             post.setContent(cleanedContent);
         }
         
@@ -164,23 +176,24 @@ public class PostViewController {
         return "redirect:/posts/all"; // Redirect to the list of all posts after deletion
     }
 
-//     @GetMapping("/user")
-// public String viewPostsByUser(@RequestParam("id") Integer userId, Model model) {
-//     // Fetch posts by user from the service
-//     List<PostDto> posts = postService.getPostsByUser(userId);
-
-//     // Clean the content of each post to remove divs with images (if needed)
-//     for (PostDto post : posts) {
-//         String cleanedContent = cleanContent(post.getContent());
-//         post.setContent(cleanedContent);
-//     }
-
-//     // Add the posts to the model
-//     model.addAttribute("posts", posts);
-
-//     // Return the name of the Thymeleaf template for displaying the user's posts
-//     return "getallpost";
-// }
+    @GetMapping("/posts/user/{userId}")
+    public String viewPostsByUser(@PathVariable("userId") Integer userId, Model model) {
+        // Fetch posts by user from the service
+        List<PostDto> posts = postService.getPostsByUser(userId);
+    
+        // Clean the content of each post to remove divs with images (if needed)
+        for (PostDto post : posts) {
+            String cleanedContent = cleanContent(post.getContent(), post);
+            post.setContent(cleanedContent);
+        }
+    
+        // Add the posts to the model
+        model.addAttribute("posts", posts);
+    
+        // Return the name of the Thymeleaf template for displaying the user's posts
+        return "getallpost";
+    }
+    
 
     // Handle comment submission
     @PostMapping("/{postId}/comment")
