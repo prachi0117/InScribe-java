@@ -18,7 +18,7 @@ import com.programming.springblog.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "https://inscribe-java-production.up.railway.app")
 public class AuthController {
 
     

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "https://inscribe-java-production.up.railway.app")
 public class PostController {
 
     @Autowired
