@@ -12,9 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class PostDto {
     private Long id;
     private String content;
@@ -24,11 +21,24 @@ public class PostDto {
     private String imageUrl;
 	private List<CommentDto> comments;
 
-    // public PostDto(String title, String content) {
-    //     this.title = title;
-    //     this.content = content;
-    // }
+   
 
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<CommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
+    }
 
     public Long getId() {
         return id;

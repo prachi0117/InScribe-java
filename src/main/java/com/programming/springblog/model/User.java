@@ -23,6 +23,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column
+    private String userName;
+    @Column
+    private String password;
+    @Column
+    private String email;
     public Integer getId() {
         return id;
     }
@@ -47,11 +53,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    @Column
-    private String userName;
-    @Column
-    private String password;
-    @Column
-    private String email;
+    
   
 }
