@@ -9,6 +9,7 @@ import com.programming.springblog.service.CommentService;
 
 @RestController
 @RequestMapping("/api/comments")
+@CrossOrigin(origins = "http://localhost:8080")
 public class CommentController {
 
     @Autowired
