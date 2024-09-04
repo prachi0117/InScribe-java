@@ -67,6 +67,10 @@ public class Post {
         this.comments = comments;
     }
 
+
+    // No-argument constructor
+    public Post() {}
+
     public Post(Long id, String title, String content, User user, Set<Comment> comments) {
         this.id = id;
         this.title = title;
