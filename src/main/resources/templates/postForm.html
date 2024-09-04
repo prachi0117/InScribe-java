@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragments/head :: head">
+<head th:replace="fragments/head :: head">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Post</title>
 </head>
 <body>
 
-    <div th:replace="/fragments/header :: header"></div>
+    <div th:replace="fragments/header :: header"></div>
 
     <div class="container mt-5">
         <form th:action="@{${post.id} != null ? '/posts/' + ${post.id} + '/edit' : '/posts/new'}" th:object="${post}" method="post">
