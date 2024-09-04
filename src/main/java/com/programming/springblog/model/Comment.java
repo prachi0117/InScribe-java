@@ -26,6 +26,10 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
+    public Comment() {
+    }
+    
     public Comment(Integer id, String content, Post post, User user, Instant createdOn) {
         this.id = id;
         this.content = content;
