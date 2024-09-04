@@ -68,10 +68,11 @@ public class PostViewController {
        // Extract content and image URL
        String content = formData.get("content");
        String imageUrl = extractImageUrl(content);
+       postDto.setImageUrl(imageUrl);
        String cleanedContent = cleanContent(content, postDto);
 
        postDto.setContent(cleanedContent);
-       postDto.setImageUrl(imageUrl); // Set the image URL in the PostDto
+        // Set the image URL in the PostDto
     
         PostDto createdPost = postService.createPost(postDto, userId);
         return "redirect:/posts/" + createdPost.getId(); // Redirects to the post's detail page
@@ -79,30 +80,17 @@ public class PostViewController {
 
     private String extractImageUrl(String htmlContent) {
         Document document = Jsoup.parse(htmlContent);
-        // Select the first <img> tag in the content
         Element imgElement = document.selectFirst("img");
         if (imgElement != null) {
-            // Extract the src attribute (image URL)
-            return imgElement.attr("src");
+            return imgElement.attr("src"); // Extract the image URL
         }
         return null; // Return null if no image URL is found
     }
 
     private String cleanContent(String htmlContent, PostDto postDto) {
         Document document = Jsoup.parse(htmlContent);
-        
-        // Select the first <img> tag in the content
-        Element imgElement = document.selectFirst("img");
-        if (imgElement != null) {
-            // Extract the src attribute (image URL)
-            String imageUrl = imgElement.attr("src");
-            postDto.setImageUrl(imageUrl); // Set the image URL in the PostDto
-        }
-        
-        // Optionally, remove the <img> tags from the content if you want to store just text
-        document.select("img").remove();
-        
-        return document.body().html(); // Return the cleaned content
+        document.select("img").remove(); // Remove <img> tags
+        return document.body().html(); 
     }
 
     private Integer getUserIdFromPrincipal(Principal principal) {

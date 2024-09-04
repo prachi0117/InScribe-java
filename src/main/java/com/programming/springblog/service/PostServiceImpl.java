@@ -108,6 +108,7 @@ public class PostServiceImpl implements PostService {
         return "/images/spotlight2.jpg"; // Return a default image URL if none found
     }
     
+
     @Override
     public PostDto updatePost(PostDto postDto, Long postId) {
         Post post = this.postRepository.findById(postId)
