@@ -18,7 +18,7 @@ public class EmailService {
         message.setText("Dear " + username + ",\n\n"
                 + "Thank you for registering with InScribe, your all-in-one content management solution designed to simplify and enhance your content creation and organization experience. We're thrilled to have you join our community!\n" + //
                                         "\n" + //
-                                        "To get started with InScribe, please log in to your account using the following link: http://localhost:8080/login\n" + //
+                                        "To get started with InScribe, please log in to your account using the following link: https://inscribe-java-production.up.railway.app/login\n" + //
                                         "\n" + //
                                         "Should you have any questions or need assistance, our support team is here to help. Feel free to reach out to us at any time.\n" + //
                                         "\n" + //
